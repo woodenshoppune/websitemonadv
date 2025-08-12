@@ -1,0 +1,22 @@
+*{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;}
+body{margin:0;background:#f5f8fb;color:#0b1b2b;min-height:100vh;display:flex;flex-direction:column;align-items:center;}
+header{background:#0b74de;color:#fff;width:100%;padding:18px 20px;box-shadow:0 2px 6px rgba(11,116,222,.12);}
+h1{margin:0;font-size:20px;}
+.tagline{margin:6px 0 0;font-size:13px;opacity:.95;}
+main{width:100%;max-width:900px;padding:18px;}
+.controls{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
+.controls input[type="number"]{width:80px;padding:8px;border:1px solid #d6e7ff;border-radius:6px;}
+.controls input#urlInput{flex:1;padding:10px;border:1px solid #d6e7ff;border-radius:6px;}
+button{background:#0b74de;color:#fff;border:none;padding:10px 12px;border-radius:8px;cursor:pointer;}
+button:disabled{opacity:.6;cursor:not-allowed;}
+.sites{display:flex;flex-direction:column;gap:8px;}
+.card{background:#fff;border-radius:10px;padding:12px;box-shadow:0 1px 4px rgba(2,6,23,.06);display:flex;align-items:center;justify-content:space-between;}
+.card .meta{display:flex;gap:12px;align-items:center;}
+.badge{padding:6px 10px;border-radius:999px;font-weight:600;}
+.status-up{background:#e6f7ef;color:#06693a;}
+.status-down{background:#ffecec;color:#8a1f1f;}
+.small{font-size:12px;color:#5b6b7a;}
+.actions button{background:transparent;color:#0b74de;padding:6px;border-radius:6px;border:1px solid transparent;}
+.actions button.danger{color:#c22;border-color:rgba(194,34,34,.08);}
+.server-switch{font-size:13px;color:#0b2b4a;display:flex;align-items:center;gap:6px;}
+footer{width:100%;max-width:900px;padding:14px;text-align:center;color:#556;}

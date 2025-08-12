@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Site Monitor — PWA + Server</title>
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#0b74de"/>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Site Monitor · PWA + Server</h1>
+    <p class="tagline">Reliable checks via optional server proxy. Add sites, set interval, view logs.</p>
+  </header>
+
+  <main>
+    <section class="controls">
+      <input id="urlInput" placeholder="https://example.com" />
+      <input id="intervalInput" type="number" min="10" value="30" /> <label for="intervalInput">sec</label>
+      <button id="addBtn">Add site</button>
+      <button id="notifyBtn">Enable notifications</button>
+      <button id="exportBtn">Export logs (CSV)</button>
+      <label class="server-switch"><input type="checkbox" id="useServer" checked /> Use server checks</label>
+    </section>
+
+    <section id="sitesList" class="sites"></section>
+  </main>
+
+  <footer>
+    <small>For reliable monitoring, run the bundled server (see README). The server performs checks (no CORS issues) and persists logs to disk.</small>
+  </footer>
+
+  <script src="/app.js" type="module"></script>
+</body>
+</html>

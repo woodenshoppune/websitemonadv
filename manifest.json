@@ -1,7 +1,7 @@
 {
-  "name": "Site Monitor PWA + Server (HTTP&HTTPS)",
+  "name": "Site Monitor PWA + Server",
   "short_name": "SiteMonitorSrv",
-  "description": "Website availability monitor with server-side HTTP & HTTPS checks.",
+  "description": "Website availability monitor with optional server-side checks.",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#0b74de",

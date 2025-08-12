@@ -1,14 +1,9 @@
-Site Monitor — PWA + Bundled Server (HTTP & HTTPS)
-====================================================
+Site Monitor — PWA + Server
+==========================
 
-Overview
-- This project is a Progressive Web App (frontend) bundled with a small Node.js server.
-- The server performs reliable HTTP & HTTPS checks (avoids browser CORS) and persists sites/logs to disk.
-
-Highlights
-- Support for both HTTP and HTTPS targets — specify the protocol in the URL (http://... or https://...).
-- Optional server-side skip TLS verification for targets with self-signed certs (see SERVER_SKIP_TLS env var).
-- Frontend runs as a PWA with offline app shell caching.
+This project contains:
+- frontend/ (served at root): PWA (index.html, styles.css, app.js, manifest, service-worker, icons)
+- server/ (Node.js): Express server that performs reliable server-side checks (avoids CORS) and schedules checks persistently.
 
 Server features
 - Endpoints:
@@ -17,26 +12,28 @@ Server features
   - DELETE /api/sites -> remove site (JSON body: {url})
   - GET /api/check?url=... -> performs an on-demand check and returns {status, code, latency}
   - GET /api/logs -> returns server-side logs
-- Persists to server/data.json
-- Schedules per-site checks on the server and stores logs.
+- Persists sites and logs to disk in server/data.json
+- Schedules per-site checks on the server; performs fetch from server (no browser CORS)
+- Run with Node 18+ (or install node-fetch if on older Node)
 
-Security / TLS notes
-- By default the server verifies TLS certificates for HTTPS targets.
-- If you need to monitor internal services with self-signed certificates, you can run the server with:
-  `SERVER_SKIP_TLS=true node index.js`
-  This disables certificate verification (INSECURE — only for testing).
-
-Run locally
-1. Ensure Node.js 16+ (Node 18+ recommended).
+How to run (local)
+1. Install Node.js 18+ (or 16+ and run `npm install` which includes node-fetch).
 2. In project root:
    - `cd server`
    - `npm install`
-   - `SERVER_SKIP_TLS=false node index.js`   # or set true to skip TLS verification (not recommended)
-3. Open http://localhost:3000
+   - `node index.js`
+3. Open http://localhost:3000 in your browser. The frontend will use server-mode by default (checkbox checked).
 
 Docker
-- Build:
-  - `docker build -t site-monitor-server .`
-- Run:
-  - `docker run -p 3000:3000 -e SERVER_SKIP_TLS=false site-monitor-server`
+- A Dockerfile is included in /server. Build and run:
+  - `docker build -t site-monitor-server server/`
+  - `docker run -p 3000:3000 site-monitor-server`
+
+Deployment
+- This is a single app that serves both the frontend static files and the API from the same origin. Deploy the server folder to any Node-capable host (Heroku, Railway, Fly.io, VPS).
+- For static-only deployment (Netlify/GitHub Pages) you can still use the frontend but will need to run the server separately (or remove server mode).
+
+Limitations & notes
+- Server performs HTTP(S) requests to target sites; some hosts may block frequent checks. Be mindful of rate limits.
+- This is a simple monitor intended for light use or as a starting point. For production-grade uptime monitoring consider specialized services.
 

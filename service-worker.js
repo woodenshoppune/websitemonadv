@@ -1,5 +1,5 @@
-// Basic service worker caching app shell
-const CACHE = 'site-monitor-v3';
+// Basic service worker: caches app shell
+const CACHE = 'site-monitor-v2';
 const OFFLINE_URLS = [
   '/index.html',
   '/styles.css',

@@ -1,5 +1,5 @@
 // Frontend for Site Monitor — works with optional server at same origin.
-// If 'Use server checks' is enabled, requests go to /api/* to avoid CORS and use reliable server-side checks.
+// The server performs HTTP & HTTPS checks; specify full URL with protocol (http:// or https://).
 
 const addBtn = document.getElementById('addBtn');
 const urlInput = document.getElementById('urlInput');
@@ -9,12 +9,12 @@ const notifyBtn = document.getElementById('notifyBtn');
 const exportBtn = document.getElementById('exportBtn');
 const useServerCheckbox = document.getElementById('useServer');
 
-let sites = JSON.parse(localStorage.getItem('sites_v2') || '[]');
-let logs = JSON.parse(localStorage.getItem('logs_v2') || '[]');
+let sites = JSON.parse(localStorage.getItem('sites_v3') || '[]');
+let logs = JSON.parse(localStorage.getItem('logs_v3') || '[]');
 
 function save() {
-  localStorage.setItem('sites_v2', JSON.stringify(sites));
-  localStorage.setItem('logs_v2', JSON.stringify(logs));
+  localStorage.setItem('sites_v3', JSON.stringify(sites));
+  localStorage.setItem('logs_v3', JSON.stringify(logs));
 }
 
 async function fetchSitesFromServer() {
@@ -22,7 +22,6 @@ async function fetchSitesFromServer() {
     const resp = await fetch('/api/sites');
     if (!resp.ok) throw new Error('no server');
     const data = await resp.json();
-    // replace local with server authoritative list
     sites = data.sites || sites;
     save();
   } catch(e) {
@@ -31,7 +30,6 @@ async function fetchSitesFromServer() {
 }
 
 async function render() {
-  // try to sync with server when using server mode
   if (useServerCheckbox.checked) {
     await fetchSitesFromServer();
   }
@@ -80,7 +78,6 @@ async function checkSite(s, manual=false) {
   let latency = null;
   try {
     if (useServerCheckbox.checked) {
-      // ask server to check - avoids CORS
       const resp = await fetch('/api/check?url=' + encodeURIComponent(s.url));
       const data = await resp.json();
       status = data.status;
@@ -134,7 +131,6 @@ addBtn.onclick = async () => {
   sites.push(site);
   save();
   if (useServerCheckbox.checked) {
-    // tell server about new site so it can monitor persistently
     try {
       await fetch('/api/sites', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(site)});
     } catch(e){ console.log('server add failed', e.message); }
@@ -168,11 +164,10 @@ exportBtn.onclick = () => {
   URL.revokeObjectURL(url);
 };
 
-// Scheduler - schedules client side checks when not using server
+// Scheduler - client side only when not using server
 function scheduleChecks() {
-  // clear any timers stored on objects
   sites.forEach(s => { if (s._timer) { clearInterval(s._timer); s._timer = null; } });
-  if (useServerCheckbox.checked) return; // server does scheduling
+  if (useServerCheckbox.checked) return;
   sites.forEach(s => {
     s._timer = setInterval(()=>checkSite(s), Math.max(10000, (s.interval||30)*1000));
     if (!s.lastChecked) checkSite(s);
@@ -188,9 +183,6 @@ window.addEventListener('beforeunload', () => { sites.forEach(s => { if (s._time
 render();
 scheduleChecks();
 
-new MutationObserver(()=>scheduleChecks()).observe(sitesList, {childList:true, subtree:true});
-
-// Try register service worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/service-worker.js').then(reg=>{
     console.log('SW registered', reg);

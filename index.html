@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Site Monitor — PWA + Server</title>
+  <title>Site Monitor — PWA + Server (HTTP & HTTPS)</title>
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#0b74de"/>
   <link rel="stylesheet" href="/styles.css">
@@ -11,12 +11,12 @@
 <body>
   <header>
     <h1>Site Monitor · PWA + Server</h1>
-    <p class="tagline">Reliable checks via optional server proxy. Add sites, set interval, view logs.</p>
+    <p class="tagline">Reliable HTTP & HTTPS checks via the bundled server. Add sites, set interval, view logs.</p>
   </header>
 
   <main>
     <section class="controls">
-      <input id="urlInput" placeholder="https://example.com" />
+      <input id="urlInput" placeholder="https://example.com or http://example.com" />
       <input id="intervalInput" type="number" min="10" value="30" /> <label for="intervalInput">sec</label>
       <button id="addBtn">Add site</button>
       <button id="notifyBtn">Enable notifications</button>
@@ -28,7 +28,7 @@
   </main>
 
   <footer>
-    <small>For reliable monitoring, run the bundled server (see README). The server performs checks (no CORS issues) and persists logs to disk.</small>
+    <small>Run the bundled server (see README) — the server performs HTTP & HTTPS checks (no browser CORS). For self-signed TLS targets, the server can be configured to optionally skip certificate verification (not recommended for production).</small>
   </footer>
 
   <script src="/app.js" type="module"></script>
